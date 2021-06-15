@@ -4,6 +4,11 @@ This program accesses Google and search words listed in `search_words.txt`.
 ## Environment
 It runs on Ubuntu (20.04). To run it on other OS's, change the brave browser path (`BROWSER_PATH`) in line 15.
 
+## Pre-requisite
+```
+pip install -r requirements.txt
+```
+
 ## How to Run
 ### Brave
 Just run it without changing anything.  
