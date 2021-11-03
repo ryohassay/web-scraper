@@ -1,28 +1,13 @@
 # Source: https://qiita.com/yasudaak/items/fee74db16163db3c9af9, https://qiita.com/shin-go/items/291c9d5223d99c185997
 
-from os import read
+import sys
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
 import random
 from time import sleep
-
-CHROME_DRIVER_PATH = 'driver/chromedriver'
-FF_DRIVER_PATH = 'driver/geckodriver'
-BROWSER_PATH = '/snap/bin/brave'  # For Ubuntu
-
-option = webdriver.ChromeOptions()
-option.binary_location = BROWSER_PATH
-option.add_argument('--user-data-dir=user')  # Without this line Brave doesn't load the webpages somehow
-# option.add_argument('--disable-dev-shm-usage')
-# option.add_argument("--incognito")  # OPTIONAL
-# option.add_argument("--headless")  # OPTIONAL
-
-# Create new Instance of Chrome
-driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH, options=option)
-
-# Create new Instance of Firefox
-# driver = webdriver.Firefox(executable_path=FF_DRIVER_PATH)
 
 
 def read_txt(path):
@@ -44,7 +29,7 @@ def leave_one_tab():
         driver.switch_to.window(driver.window_handles[-1])
 
 
-def main():
+def main(driver):
     google_url = 'https://www.google.com'
     words = read_txt('search_words.txt')
 
@@ -69,4 +54,15 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    browser = sys.argv[1]
+    
+    if browser == 'chrome':
+        options = webdriver.ChromeOptions()
+        options.add_argument('--disable-dev-shm-usage')
+        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)  # https://pypi.org/project/webdriver-manager/
+    elif browser == 'firefox':
+        options = webdriver.FirefoxOptions()
+        options.add_argument('--disable-dev-shm-usage')
+        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options)
+    
+    main(driver)
