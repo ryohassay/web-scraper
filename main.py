@@ -64,5 +64,7 @@ if __name__ == '__main__':
         options = webdriver.FirefoxOptions()
         options.add_argument('--disable-dev-shm-usage')
         driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options)
+    else:
+        raise NameError('Command line argument invalid.')
     
     main(driver)
