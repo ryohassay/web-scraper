@@ -4,6 +4,8 @@ import sys
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 import random
@@ -44,7 +46,8 @@ def main(driver):
         driver.get(google_url)
         wait = WebDriverWait(driver, 10)  # Wait until the page loads (Max 10s)
 
-        searchbox = driver.find_element_by_name('q')
+        # searchbox = driver.find_element_by_name('q')  # Deprecated
+        searchbox = driver.find_element(By.NAME, 'q')
         searchbox.send_keys(word)
         wait_random(0.3, 1)
         searchbox.send_keys(Keys.RETURN)
@@ -59,11 +62,11 @@ if __name__ == '__main__':
     if browser == 'chrome':
         options = webdriver.ChromeOptions()
         options.add_argument('--disable-dev-shm-usage')
-        driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)  # https://pypi.org/project/webdriver-manager/
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)  # https://pypi.org/project/webdriver-manager/
     elif browser == 'firefox':
         options = webdriver.FirefoxOptions()
         options.add_argument('--disable-dev-shm-usage')
-        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=options)
+        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
     else:
         raise NameError('Command line argument invalid.')
     
