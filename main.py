@@ -26,46 +26,46 @@ driver = webdriver.Chrome(executable_path=CHROME_DRIVER_PATH, options=option)
 
 
 def read_txt(path):
-	with open(path) as f:
-		lines = f.readlines()
-	
-	return lines
+    with open(path) as f:
+        lines = f.readlines()
+    
+    return lines
 
 
 def wait_random(min, max):
-	sec = random.uniform(min, max)
-	sleep(sec)
+    sec = random.uniform(min, max)
+    sleep(sec)
 
 
 def leave_one_tab():
-	while(len(driver.window_handles) > 1):
-		driver.switch_to.window(driver.window_handles[-1])
-		driver.close()
-		driver.switch_to.window(driver.window_handles[-1])
+    while(len(driver.window_handles) > 1):
+        driver.switch_to.window(driver.window_handles[-1])
+        driver.close()
+        driver.switch_to.window(driver.window_handles[-1])
 
 
 def main():
-	google_url = 'https://www.google.com'
-	words = read_txt('search_words.txt')
+    google_url = 'https://www.google.com'
+    words = read_txt('search_words.txt')
 
-	driver.execute_script("window.open()")  # Open a new tab
-	leave_one_tab()
+    driver.execute_script("window.open()")  # Open a new tab
+    leave_one_tab()
 
-	for word in words:
-		word = word.replace('\n' , '')
+    for word in words:
+        word = word.replace('\n' , '')
 
-		driver.execute_script("window.open()")  # Open a new tab
-		driver.switch_to.window(driver.window_handles[-1])  # Switch to the last tab
-		driver.get(google_url)
-		wait = WebDriverWait(driver, 10)  # Wait until the page loads (Max 10s)
+        driver.execute_script("window.open()")  # Open a new tab
+        driver.switch_to.window(driver.window_handles[-1])  # Switch to the last tab
+        driver.get(google_url)
+        wait = WebDriverWait(driver, 10)  # Wait until the page loads (Max 10s)
 
-		searchbox = driver.find_element_by_name('q')
-		searchbox.send_keys(word)
-		wait_random(0.3, 1)
-		searchbox.send_keys(Keys.RETURN)
-		wait = WebDriverWait(driver, 10)
-		wait_random(1, 2)
-	
+        searchbox = driver.find_element_by_name('q')
+        searchbox.send_keys(word)
+        wait_random(0.3, 1)
+        searchbox.send_keys(Keys.RETURN)
+        wait = WebDriverWait(driver, 10)
+        wait_random(1, 2)
+    
 
 
 if __name__ == '__main__':
